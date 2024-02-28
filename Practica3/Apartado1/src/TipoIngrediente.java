@@ -1,0 +1,3 @@
+public enum TipoIngrediente {
+    CARNE, PESCADO, FRUTA, VERDURA, LEGUMBRE, CEREAL, HUEVO, LACTEO, OTRO
+}
