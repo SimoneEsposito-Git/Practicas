@@ -1,3 +1,8 @@
+/**
+ * Contiene las tipos de ingredientes
+ * 
+ * @author Lin Qi y Simone
+ */
 public enum TipoIngrediente {
     CARNE("CARNE"), PESCADO("PESCADO"), FRUTA_VERDURA("FRUTA_VERDURA"), LEGUMBRE("LEGUMBRE"), CEREAL("CEREAL"), HUEVO("HUEVO"), LACTEO("LACTEO"), OTRO("OTRO");
 
