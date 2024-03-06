@@ -32,6 +32,10 @@ public class Plato {
         return this.ingredientes;
     }
 
+    public String getNombre(){
+        return this.nombre;
+    }
+
     public String toString(){
         String alergenos = "";
         Iterator<Alergeno> it = this.alergenos.iterator();
