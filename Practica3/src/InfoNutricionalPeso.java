@@ -20,6 +20,11 @@ public class InfoNutricionalPeso extends InfoNutricional{
         super(calorias, hidratosDeCarbono, grasas, grasasSaturadas, proteinas, azucar, fibra, sodio);
     }
 
+    @Override
+    public double cantidadPorcion(double cantidad){
+        return cantidad/100;
+    }
+
     /**
      * Sobreescribe toString()
      * 

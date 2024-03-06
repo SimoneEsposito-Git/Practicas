@@ -52,6 +52,13 @@ public class Ingrediente{
         return this;
     }
 
+    public HashSet<Alergeno> getAlergenos(){
+        return this.alergenos;
+    }
+
+    public InfoNutricional getInfoNutricional(){
+        return this.infoNutricional;
+    }
     /**
      * Sobreescribe toString()
      * 

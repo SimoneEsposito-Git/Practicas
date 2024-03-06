@@ -35,7 +35,78 @@ public abstract class InfoNutricional{
         this.fibra = fibra;
         this.sodio = sodio;
     }
+    
+    //Setters
 
+    public void setCalorias(double calorias){
+        this.calorias = calorias;
+    }
+
+    public void setHidratosDeCarbono(double hidratosDeCarbono){
+        this.hidratosDeCarbono = hidratosDeCarbono;
+    }
+
+    public void setGrasas(double grasas){
+        this.grasas = grasas;
+    }
+
+    public void setGrasasSaturadas(double grasasSaturadas){
+        this.grasasSaturadas = grasasSaturadas;
+    }
+
+    public void setProteinas(double proteinas){
+        this.proteinas = proteinas;
+    }
+
+    public void setAzucar(double azucar){
+        this.azucar = azucar;
+    }
+
+    public void setFibra(double fibra){
+        this.fibra = fibra;
+    }
+
+    public void setSodio(double sodio){
+        this.sodio = sodio;
+    }
+
+    //Getters
+
+    public double getCalorias(){
+        return calorias;
+    }
+
+    public double getHidratosDeCarbono(){
+        return hidratosDeCarbono;
+    }
+
+    public double getGrasas(){
+        return grasas;
+    }
+
+    public double getGrasasSaturadas(){
+        return grasasSaturadas;
+    }
+
+    public double getProteinas(){
+        return proteinas;
+    }
+
+    public double getAzucar(){
+        return azucar;
+    }
+
+    public double getFibra(){
+        return fibra;
+    }
+
+    public double getSodio(){
+        return sodio;
+    }
+
+    public double cantidadPorcion(double cantidad){
+        return cantidad;
+    }
     /**
      * Sobreesicribe toString()
      * 
@@ -43,6 +114,10 @@ public abstract class InfoNutricional{
      */
     @Override
     public String toString(){
-        return "Valor energetico: " + calorias + " kcal, Hidratos de carbono: " + hidratosDeCarbono + " g, Grasas: " + grasas + " g, Saturadas: " + grasasSaturadas + " g, Proteinas: " + proteinas + " g, Azucares: " + azucar + " g, Fibra: " + fibra + " g, Sodio: " + sodio + " mg.";
+        return "Valor energetico: " + round(calorias) + " kcal, Hidratos de carbono: " + round(hidratosDeCarbono) + " g, Grasas: " + round(grasas) + " g, Saturadas: " + round(grasasSaturadas) + " g, Proteinas: " + round(proteinas) + " g, Azucares: " + round(azucar) + " g, Fibra: " + round(fibra) + " g, Sodio: " + round(sodio) + " mg.";
+    }
+
+    private double round(double value){
+        return Math.round(value * 100.0) / 100.0;
     }
 }
