@@ -10,9 +10,9 @@ public class MenusTester extends PlatosTester{
     }
     public List<Menu> crearMenus(){
         Map<String, Plato> platos = this.crearPlatos();
-        Menu m1 = new Menu(platos.get("Macarones"), platos.get("Tortilla"));
-        Menu m2 = new Menu(platos.get("Macarones"), platos.get("Tortilla guisada"));
-        Menu m3 = new Menu(platos.get("Macarones"));
+        Menu m1 = new Menu(platos.get("Macarrones"), platos.get("Tortilla"));
+        Menu m2 = new Menu(platos.get("Macarrones"), platos.get("Tortilla guisada"));
+        Menu m3 = new Menu(platos.get("Macarrones"));
         return List.of(m1, m2, m3);
     }
 }

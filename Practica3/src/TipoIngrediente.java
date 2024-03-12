@@ -8,10 +8,20 @@ public enum TipoIngrediente {
 
     private String tipo;
 
+    /**
+     * Constructor de tipo de ingredientes
+     * 
+     * @param tipo su valor de String
+     */
     private TipoIngrediente (String tipo) {
         this.tipo = tipo;
     }
 
+    /**
+     * Devuelve el valor de tipo de ingrediente
+     * 
+     * @return el valor
+     */
     public String getTipo() {
         return this.tipo;
     }

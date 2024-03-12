@@ -20,6 +20,12 @@ public class InfoNutricionalPeso extends InfoNutricional{
         super(calorias, hidratosDeCarbono, grasas, grasasSaturadas, proteinas, azucar, fibra, sodio);
     }
 
+    /**
+     * Calcula la porcion de cantidad
+     * 
+     * @param cantidad la cantidad inicial
+     * @return la cantidad dividida por 100
+     */
     @Override
     public double cantidadPorcion(double cantidad){
         return cantidad/100;

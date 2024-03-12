@@ -1,52 +1,84 @@
 import java.util.*;
 
-public class Plato {
-    private String nombre;
-    private InfoNutricionalPlato infoNutricional;
-    private HashSet<Ingrediente> ingredientes;
-    private HashSet<Alergeno> alergenos;
+/**
+ * Contiene la informacion de un plato
+ * 
+ * @author Lin Qi y Simone
+ */
+public class Plato extends AlimentoConNombre{
+    private HashMap<AlimentoConNombre, Double> alimentosConNombre;
 
+    /**
+     * Constructor de plato
+     * 
+     * @param nombre el nombre del plato
+     */
     public Plato(String nombre){
-        this.nombre = nombre;
-        this.ingredientes = new HashSet<>();
+        super(nombre);
+        this.alimentosConNombre = new HashMap<>();
         this.infoNutricional = new InfoNutricionalPlato();
-        this.alergenos = new HashSet<>();
-    }
-    public boolean addIngrediente(Ingrediente ingrediente, int cantidad){
-        if(this.ingredientes.contains(ingrediente)) return true;
-        this.ingredientes.add(ingrediente);
-        this.infoNutricional.addIngrediente(ingrediente, cantidad);
-        if (ingrediente.getAlergenos() != null) this.alergenos.addAll(ingrediente.getAlergenos());
-        return false;
     }
 
-    public void addPlato(Plato plato){
-        for (Ingrediente ingrediente: plato.getIngredientes()){
-            this.ingredientes.add(ingrediente);
-            this.infoNutricional.addIngrediente(ingrediente, 1);
-            if (ingrediente.getAlergenos() != null) this.alergenos.addAll(ingrediente.getAlergenos());
+    /**
+     * Anyade un ingrediente al plato
+     * 
+     * @param ingrediente el ingrediente a anyadir
+     * @param cantidad la cantidad del ingrediente
+     * @return true si se anyade correctamente, false en caso contrario
+     */
+    public boolean addIngrediente(Ingrediente ingrediente, double cantidad){
+        if(ingrediente == null || (this.alimentosConNombre).containsKey(ingrediente)) return false;
+        (this.alimentosConNombre).put(ingrediente, cantidad);
+        (this.infoNutricional).addInfoNutricional(ingrediente.infoNutricional, cantidad);
+        if (ingrediente.getAlergenos() != null) this.alergenos.addAll(ingrediente.alergenos);
+        return true;
+    }
+
+    /**
+     * Anyde un plato al plato
+     * 
+     * @param plato el plato a anyadir
+     * @return true si se anyade correctamente, false en caso contrario
+     */
+    public boolean addPlato(Plato plato){
+        if (plato == null) {
+            return false;
         }
+        if (this.nombre == plato.nombre) { // no permite anyadir platos con el mismo nombre(tambien evita que se anyade a si mismo)
+            return false;
+        }
+        if ((this.alimentosConNombre).containsKey(plato)) return false;
+        (this.alimentosConNombre).put(plato, 1.0);
+        (this.infoNutricional).addInfoNutricional(plato.infoNutricional,1.0);
+        if (plato.alergenos != null) this.alergenos.addAll(plato.alergenos);
+        return true;
     }
 
-    public HashSet<Ingrediente> getIngredientes(){
-        return this.ingredientes;
+    /**
+     * Devuelve los alimentos de un plato
+     * 
+     * @return los alimentos
+     */
+    public HashMap<AlimentoConNombre, Double> getAlimentosConNombre(){
+        return this.alimentosConNombre;
     }
 
-    public String getNombre(){
+    /**
+     * Devuelve el nombre de un plato
+     * 
+     * @return su nombre
+     */
+    public String getNombre() {
         return this.nombre;
     }
 
+    /**
+     * Sobreescribe toString
+     * 
+     * @return String que contiene la informacion del plato
+     */
+    @Override
     public String toString(){
-        String alergenos = "";
-        Iterator<Alergeno> it = this.alergenos.iterator();
-        if (it.hasNext()) {
-            alergenos += it.next();
-            while (it.hasNext()) {
-                alergenos += (", " + it.next());
-            }
-            alergenos = alergenos.toLowerCase();
-            alergenos = " CONTIENE " + alergenos;
-        }
-        return "[Plato] " + this.nombre + ": " + this.infoNutricional + alergenos;
+        return "[Plato] " + super.toString();
     }
 }

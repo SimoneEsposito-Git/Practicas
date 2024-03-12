@@ -5,12 +5,9 @@ import java.util.*;
  * 
  * @author Lin Qi y Simone
  */
-public class Ingrediente{
-    private String nombre;
+public class Ingrediente extends AlimentoConNombre{
     private TipoIngrediente tipoIngrediente;
     private String tipo;
-    private InfoNutricional infoNutricional;
-    private HashSet<Alergeno> alergenos = new HashSet<>();
 
     /**
      * Constructor de ingrediente
@@ -20,7 +17,7 @@ public class Ingrediente{
      * @param inforNutricional informacion nutricional del ingrediente
      */
     public Ingrediente(String nombre, TipoIngrediente tipoIngrediente, InfoNutricional infoNutricional){
-        this.nombre = nombre;
+        super(nombre);
         this.tipoIngrediente = tipoIngrediente;
         this.tipo = tipoIngrediente.getTipo();
         this.infoNutricional = infoNutricional;
@@ -34,7 +31,7 @@ public class Ingrediente{
      * @param inforNutricional informacion nutricional del ingrediente
      */
     public Ingrediente(String nombre, String tipo, InfoNutricional infoNutricional){
-        this.nombre = nombre;
+        super(nombre);
         this.tipoIngrediente = TipoIngrediente.OTRO;
         this.tipo = tipo;
         this.infoNutricional = infoNutricional;
@@ -52,13 +49,6 @@ public class Ingrediente{
         return this;
     }
 
-    public HashSet<Alergeno> getAlergenos(){
-        return this.alergenos;
-    }
-
-    public InfoNutricional getInfoNutricional(){
-        return this.infoNutricional;
-    }
     /**
      * Sobreescribe toString()
      * 
@@ -66,17 +56,6 @@ public class Ingrediente{
      */
     @Override
     public String toString(){
-        String alergenos = "";
-        Iterator<Alergeno> it = this.alergenos.iterator();
-        if (it.hasNext()) {
-            alergenos += it.next();
-            while (it.hasNext()) {
-                alergenos += (", " + it.next());
-            }
-            alergenos = alergenos.toLowerCase();
-            alergenos = " CONTIENE " + alergenos;
-        }
-        
-        return "[" + this.tipo + "] " + this.nombre + ": " + this.infoNutricional + alergenos;
+        return "[" + this.tipo + "] " + super.toString();
     }
 }

@@ -11,7 +11,7 @@ public class PlatosTester extends IngredientesTester {
     public Map<String, Plato> crearPlatos() {
         Map<String, Ingrediente> ing = this.crearIngredientes();
         Plato p1, p2, p3;
-        p1 = new Plato("Maccarones");
+        p1 = new Plato("Macarrones");
         if (p1.addIngrediente(ing.get("Pasta"), 90)) System.out.println("ingrediente repetido");
         if (p1.addIngrediente(ing.get("Pasta"), 90)) System.out.println("ingrediente repetido");
         if (p1.addIngrediente(ing.get("Tomate"), 4)) System.out.println("ingrediente repetido");
@@ -25,6 +25,6 @@ public class PlatosTester extends IngredientesTester {
         p3 = new Plato("Tortilla guisada");
         p3.addPlato(p2);
         p3.addIngrediente(ing.get("Caldo"), 80);
-        return Map.of("Maccarones", p1, "Tortilla", p2, "Tortilla guisada", p3);
+        return Map.of("Macarrones", p1, "Tortilla", p2, "Tortilla guisada", p3);
     }
 }
