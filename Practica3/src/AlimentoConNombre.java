@@ -18,6 +18,15 @@ public abstract class AlimentoConNombre extends Alimento{
     }
 
     /**
+     * Devuelve el nombre del alimento con nombre
+     * 
+     * @return nombre del alimento con nombre
+     */
+    public String getNombre() {
+        return this.nombre;
+    }
+    
+    /**
      * Sobreescribe toString para que imprima de una manera distinta
      * 
      * @return String que contiene la informacion del alimento con nombre

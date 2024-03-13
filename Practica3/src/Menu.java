@@ -32,6 +32,15 @@ public class Menu extends Alimento{
     }
 
     /**
+     * Devuelve los platos del menu
+     * 
+     * @return platos del menu
+     */
+    public HashSet<Plato> getPlatos(){
+        return this.platos;
+    }
+
+    /**
      * Sobreescribe toString
      * 
      * @return String que contiene la informacion del menu
