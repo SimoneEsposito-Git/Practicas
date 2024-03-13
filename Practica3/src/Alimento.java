@@ -7,7 +7,7 @@ import java.util.*;
  */
 public abstract class Alimento{
     protected InfoNutricional infoNutricional;
-    protected HashSet<Alergeno> alergenos = new HashSet<>();
+    protected Set<Alergeno> alergenos = new HashSet<>();
 
     /**
      * Constructor por defecto de alimento
@@ -30,7 +30,7 @@ public abstract class Alimento{
      * 
      * @return los alergenos de un alimento
      */
-    public HashSet<Alergeno> getAlergenos() {
+    public Set<Alergeno> getAlergenos() {
         return this.alergenos;
     }
 
