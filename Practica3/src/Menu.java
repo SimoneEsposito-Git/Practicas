@@ -41,6 +41,21 @@ public class Menu extends Alimento{
     }
 
     /**
+     * Anade un plato al menu
+     * 
+     * @param plato plato a anadir
+     */
+    public void addPlato(Plato plato){
+        if (plato != null) {
+            this.platos.add(plato);
+            (this.infoNutricional).addInfoNutricional(plato.infoNutricional, 1.0);
+            if (plato.alergenos != null) {
+                (this.alergenos).addAll(plato.alergenos);
+            }
+        }
+    }
+    
+    /**
      * Sobreescribe toString
      * 
      * @return String que contiene la informacion del menu

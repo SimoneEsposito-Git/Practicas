@@ -50,6 +50,15 @@ public class Ingrediente extends AlimentoConNombre{
     }
 
     /**
+     * Devuelve el tipo de ingrediente
+     * 
+     * @return tipo de ingrediente
+     */
+    public TipoIngrediente getTipo(){
+        return this.tipoIngrediente;
+    }
+
+    /**
      * Sobreescribe toString()
      * 
      * @return String que contiene la informacion del ingrediente

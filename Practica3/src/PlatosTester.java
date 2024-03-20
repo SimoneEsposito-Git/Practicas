@@ -13,9 +13,9 @@ public class PlatosTester extends IngredientesTester {
         Plato p1, p2, p3;
         p1 = new Plato("Macarrones");
         if (p1.addIngrediente(ing.get("Pasta"), 90)) System.out.println("ingrediente repetido");
-        if (p1.addIngrediente(ing.get("Pasta"), 90)) System.out.println("ingrediente repetido");
+        //if (p1.addIngrediente(ing.get("Pasta"), 90)) System.out.println("ingrediente repetido");
         if (p1.addIngrediente(ing.get("Tomate"), 4)) System.out.println("ingrediente repetido");
-        if (p1.addIngrediente(ing.get("Tomate"), 4)) System.out.println("ingrediente repetido");
+        //if (p1.addIngrediente(ing.get("Tomate"), 4)) System.out.println("ingrediente repetido");
         p1.addIngrediente(ing.get("Aceite"), 10);
         p1.addIngrediente(ing.get("Chorizo"), 30);
         p2 = new Plato("Tortilla");
