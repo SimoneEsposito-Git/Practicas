@@ -1,3 +1,14 @@
+package blockchain;
+import java.util.*;
+import blockchain.utils.CommonUtils;
+
+/**
+ * Tester class for the exercise 1 of the ADSOF course
+ * 
+ * This class is used to test the implementation of the exercise 1
+ * 
+ * @version 1.0
+ */
 public class TesterMainExercise1 {
     protected Wallet wallet1, wallet2, wallet3;
     protected MiningNode miningNode, miningNode2;
