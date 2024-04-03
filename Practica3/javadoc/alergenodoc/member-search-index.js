@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"alimentos","c":"Alergeno","l":"FRUTOS_SECOS"},{"p":"alimentos","c":"Alergeno","l":"GLUTEN"},{"p":"alimentos","c":"Alergeno","l":"HUEVO"},{"p":"alimentos","c":"Alergeno","l":"LACTOSA"},{"p":"alimentos","c":"Alergeno","l":"valueOf(String)","u":"valueOf(java.lang.String)"},{"p":"alimentos","c":"Alergeno","l":"values()"}];updateSearchResults();
