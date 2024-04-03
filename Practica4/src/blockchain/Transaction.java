@@ -1,21 +1,59 @@
 package blockchain;
-import java.util.*;
 
+import exception.*;
+
+/**
+ * Una transaccion entre dos nodos
+ * 
+ * @author Lin Qi y Simone Esposito
+ */
 public class Transaction {
-    private Wallet sender;
-    private Wallet receiver;
-    private int amount;
-    public Transaction(Wallet sender, Wallet receiver, int amount) {
-        this.sender = sender;
-        this.receiver = receiver;
-        this.amount = amount;
-        if (sender.getBalance() < amount) {
-            throw new IllegalArgumentException("Not enough balance in the sender's wallet");
-        }
-        sender.setBalance(sender.getBalance() - amount);
-        receiver.setBalance(receiver.getBalance() + amount);
+    private static int contador = 0;
+
+    private final int id;
+    private String claveEmisor;
+    private String claveReceptor;
+    private int cantidad;
+
+    /**
+     * Constructor de transaction
+     * 
+     * @param emisor el wallet emisor de la transaction
+     * @param receptor el wallet de receptor de la transaction
+     * @param cantidad el valor de la transaction
+     */
+    public Transaction(Wallet emisor, Wallet receptor, int cantidad) throws TransactionException {
+        this(emisor, receptor.getPublicKey(), cantidad);
     }
+
+    /**
+     * Constructor de transaction
+     * 
+     * @param emisor el wallet emisor de la transaction
+     * @param receptor el de receptor de la transaction
+     * @param cantidad el de la transaction
+     */
+    public Transaction(Wallet emisor, String receptor, int cantidad) throws TransactionException {
+        if (cantidad < 0) {
+            throw new NegativeTransactionException(emisor, receptor, cantidad);
+        }
+        else if (emisor.getBalance() > cantidad) {
+            throw new InsufficientTransactionException(emisor, receptor, cantidad);
+        }
+        this.id = Transaction.contador;
+        Transaction.contador++;
+        this.claveEmisor = emisor.getPublicKey();
+        this.claveReceptor = receptor;
+        this.cantidad = cantidad;
+    }
+
+    /**
+     * Informacion de transaccion
+     * 
+     * @return un string de informacion de transaccion
+     */
+    @Override
     public String toString() {
-        return "Transaction: " + sender.getName() + " sent " + amount + " coins to " + receiver.getName();
+        return "Transaction "+this.id+"| from: "+this.claveEmisor+", to: "+this.claveReceptor+ ", quantity: "+this.cantidad;
     }
 }

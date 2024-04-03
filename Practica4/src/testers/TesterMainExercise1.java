@@ -3,6 +3,7 @@ package testers;
 import blockchain.*;
 import blockchain.utils.*;
 import exception.NodeConnectionException;
+import exception.TransactionException;
 
 public class TesterMainExercise1 {
     protected Wallet wallet1, wallet2, wallet3;
@@ -33,11 +34,16 @@ public class TesterMainExercise1 {
                     .connect(miningNode);
         }
         catch(NodeConnectionException e) {
-            
+
         }
 
         //create example transaction, which transfers 10 coins from wallet1 to wallet2
+        try {
         new Transaction(wallet1, wallet2, 10);
+        }
+        catch(TransactionException e) {
+            
+        }
     }
     public static void main(String[] args) {
         TesterMainExercise1 tme = new TesterMainExercise1();

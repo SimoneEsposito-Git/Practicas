@@ -24,5 +24,4 @@ public interface IMessage {
                             this.getMessage());
     }
 
-    
 }

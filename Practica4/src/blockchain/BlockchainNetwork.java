@@ -1,52 +1,104 @@
 package blockchain;
+
 import java.util.*;
 
-public class BlockchainNetwork {
-    private String name;
-    //private List<AbstractNode> nodes;
-    //private List<Subnet> subnets;
-    private List<NetworkElement> elements;
+import exception.*;
 
-    public BlockchainNetwork(String networkName) {
-        this.name = networkName;
-        this.elements = new ArrayList<>();
-        //this.nodes = new ArrayList<>();
-        //this.subnets = new ArrayList<>();
+/**
+ * Un blockchain network
+ * 
+ * @author Lin Qi y Simone Esposito
+ */
+public class BlockchainNetwork implements IConnectable{
+    private String nombre;
+    private List<BlockchainElement> elementos;
+
+    /**
+     * Constructor de blockchain network
+     * 
+     * @param nombre el nombre del network
+     */
+    public BlockchainNetwork(String nombre) {
+        this.nombre = nombre;
+        this.elementos = new ArrayList<>();
     }
-    public BlockchainNetwork connect(NetworkElement element) {
-        elements.add(element);
-        System.out.println(this.name + " - new peer connected: " + element);
+
+    /**
+     * Conecta a un nodo
+     * 
+     * @param node el nodo que se va a conectar
+     * @return si mismo si se ha anyadido correctamente, null en caso contrario
+     */
+    public BlockchainNetwork connect(Node node) throws ConnectionException, DuplicateConnectionException {
+        this.nodeIn(node);
+        this.elementos.add(node);
+        System.out.println(this.nombre+" - new peer connected: "+node);
         return this;
     }
-    /*
-    public BlockchainNetwork connect(AbstractNode node) {
-        nodes.add(node);
-        System.out.println(this.name + " - new peer connected: " + node);
-        return this;
-    }
+
+    /**
+     * Conecta a una subred
+     * 
+     * @param subnet la subred que se va a conectar
+     * @return si mismo si se ha anyadido correctament, null en caso contrario
+     */
     public BlockchainNetwork connect(Subnet subnet) {
-        subnets.add(subnet);
-        System.out.println(this.name + " - new peer connected: " + subnet);
+        if (this.elementos.contains(subnet)) {
+            return null;
+        }
+        this.elementos.add(subnet);
+        System.out.println(this.nombre+"- new peer connected: "+subnet);
         return this;
     }
-    
-    public void mineBlock() {
-        List<Transaction> block = new ArrayList<>(transactions);
-        transactions.clear();
-        for (Node node : nodes) {
-            if (node instanceof MiningNode) {
-                MiningNode miningNode = (MiningNode) node;
-                block.add(new Transaction(null, miningNode.getWallet(), 10));
-            }
+
+    /**
+     * Comprueba si un nodo perteneca a uno de sus elementos
+     * 
+     * @param nodo el nodo que se va a comrobar
+     * @return false si no
+     * @throws ConnectionException excepcion de conexion
+     * @throws DuplicateConnectionException excepcion de nodo duplicado
+     */
+    public boolean nodeIn(Node nodo) throws ConnectionException, DuplicateConnectionException {
+        for (BlockchainElement element: this.elementos) {
+            element.nodeIn(nodo);
         }
-        System.out.println("Block mined with transactions: " + block);
-    }*/
+        return false;
+    }
+
+    /**
+     * Distribuye el mensaje a los nodos
+     * 
+     * @param msg el mensaje
+     */
+    @Override
+    public void broadcast(IMessage msg) {
+        for (BlockchainElement element: this.elementos) {
+            element.broadcast(msg);
+        }
+    }
+
+    /**
+     * Devuelve el padre de blockchain network
+     * 
+     * @return null
+     */
+    @Override
+    public IConnectable getParent() {
+        return null;
+    }
+
+    /**
+     * Devuelve la informacion de un blockchain network
+     * 
+     * @return un string que contiene la informacion de un blockchain network
+     */
+    @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.name + " consists of " + elements.size() + " elements:\n");
-        for (NetworkElement element : elements) {
-            sb.append("* " + element + "\n");
+        String str = this.nombre+" consists of "+this.elementos.size()+" elements:\n";
+        for (BlockchainElement element: this.elementos) {
+            str += "* "+element+"\n";
         }
-        return sb.toString();
+        return str;
     }
 }

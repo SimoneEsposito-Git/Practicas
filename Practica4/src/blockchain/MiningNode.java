@@ -1,19 +1,41 @@
 package blockchain;
-import java.util.*;
 
-public class MiningNode extends AbstractNode {
-    private int miningPower;
+/**
+ * Un nodo minador que permite gestionar y validar las transactions
+ * 
+ * @author Lin Qi y Simone Esposito
+ */
+public class MiningNode extends Node{
+    private int capacidadComputacional;
 
-    public MiningNode(Wallet wallet, int miningPower) {
+    /**
+     * Constructor de un nodo minador
+     * 
+     * @param wallet el wallet asociado al nodo
+     * @param capacidad la maxima capacidad del nodo
+     */
+    public MiningNode(Wallet wallet, int capacidad) {
         super(wallet);
-        this.miningPower = miningPower;
+        this.capacidadComputacional = capacidad;
     }
-    
-    public int getMiningPower() {
-        return this.miningPower;
+
+    /**
+     * Devuelve el nombre completo de un node minador
+     * 
+     * @return el nombre completo de un nodo minador
+     */
+    @Override
+    public String fullName() {
+        return "MiningNode#"+this.getId();
     }
-    
+
+    /**
+     * Devuelve la informacion de un nodo minador
+     * 
+     * @return una linea de texto de informacion de nodo minador
+     */
+    @Override
     public String toString() {
-        return this.getWallet() + " | @MiningNode#" + this.getId(); 
+        return this.wallet+ " | @MiningNode#"+ this.getId();
     }
 }
