@@ -19,6 +19,6 @@ public class DuplicateConnectionException extends NodeConnectionException{
      */
     @Override
     public String toString() {
-        return super.toString()+" is already connected to the network";
+        return super.toString() + " is already connected to the network";
     }
 }

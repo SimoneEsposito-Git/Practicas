@@ -17,8 +17,13 @@ public class ConnectionException extends NodeConnectionException{
         super(nodo);
     }
 
+    /**
+     * Informacion de una excepcion de conexion
+     * 
+     * @return String de informacion de excepcion de conexion
+     */
     @Override
     public String toString() {
-        return super.toString()+" is connected to a different network";
+        return super.toString() + " is connected to a different network";
     }
 }

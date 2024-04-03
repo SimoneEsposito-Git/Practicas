@@ -26,6 +26,6 @@ public class NegativeTransactionException extends TransactionException {
      */
     @Override
     public String toString() {
-        return "Negative transfer attempt: "+super.toString();
+        return "Negative transfer attempt: " + super.toString();
     }
 }

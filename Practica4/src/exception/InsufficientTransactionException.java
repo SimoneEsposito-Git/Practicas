@@ -26,6 +26,6 @@ public class InsufficientTransactionException extends TransactionException {
      */
     @Override
     public String toString() {
-        return "Insufficient transfer attempt: "+super.toString();
+        return "Insufficient transfer attempt: " + super.toString();
     }
 }

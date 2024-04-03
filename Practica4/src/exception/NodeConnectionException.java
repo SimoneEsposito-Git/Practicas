@@ -26,6 +26,6 @@ public abstract class NodeConnectionException extends Exception{
      */
     @Override
     public String toString() {
-        return "Connection exception: Node "+this.nodo.getId();
+        return "Connection exception: Node " + this.nodo.getId();
     }
 }
