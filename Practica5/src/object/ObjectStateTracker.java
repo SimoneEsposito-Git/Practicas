@@ -68,9 +68,14 @@ public class ObjectStateTracker<T, S extends Comparable<S>> {
      */
     @SafeVarargs
     public final void addObjects(T... objects) {
-        // put all the objects in the map with the default state
+        // put all the objects in the map with the right state. no duplicates allowed
+        
         for (T object : objects) {
-            stateMap.put(object, defaultState);
+            System.out.println("Adding object with hashcode: " + object.hashCode());
+
+            if (!stateMap.containsKey(object)) {
+                stateMap.put(object, defaultState);
+            }
         }
         updateStates();
     }
