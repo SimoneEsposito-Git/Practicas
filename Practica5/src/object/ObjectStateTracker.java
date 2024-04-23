@@ -1,108 +1,124 @@
 package object;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.function.*;
 
-/*
+/**
  * This class is a generic object state tracker. It allows you to track the state of objects of a specific type.
  * 
  * @author Lin Qi y Simone Esposito
- * 
  */
-
 public class ObjectStateTracker<T, S extends Comparable<S>> {
-    private Map<T, S> stateMap;
-    private List<S> validStates;
-    private List<Map.Entry<Predicate<T>, S>> conditions;
-    private S defaultState;
+    private TreeMap<S, List<T>> stateMap;
+    private TreeSet<S> validStates;
+    private LinkedHashMap<Predicate<T>, S> conditions;
+    private Map<T, S> elementStates;
+    private S defaultState = null;
 
+    /**
+     * Constructor de state tracker
+     * 
+     * @param states los estados disponibles
+     */
     public ObjectStateTracker(S[] states) {
-        this.validStates = Arrays.asList(states);
-        this.stateMap = new HashMap<>();
-        this.conditions = new ArrayList<>();
+        this.validStates = new TreeSet<>(Arrays.asList(states));
+        this.stateMap = new TreeMap<>();
+        this.elementStates = new HashMap<>();
+        for (S element: this.validStates) {
+            this.stateMap.putIfAbsent(element, new ArrayList<>());
+        }
+        this.conditions = new LinkedHashMap<>();
+        this.defaultState = this.validStates.first();
     }
 
+    /**
+     * Anyade una condicion al tracker
+     * 
+     * @param state el estado que cambia
+     * @param condition la condicion que se cumple
+     * @return si mismo
+     */
     public ObjectStateTracker<T, S> withState(S state, Predicate<T> condition) {
         if (!validStates.contains(state)) {
             throw new IllegalStateException("Invalid state: " + state);
         }
-        conditions.add(new AbstractMap.SimpleEntry<>(condition, state));
+        this.conditions.put(condition, state);
         return this;
     }
 
+    /**
+     * Anyade un estado por defecto
+     * 
+     * @param state el estado por defecto
+     * @return si mismo
+     */
     public ObjectStateTracker<T, S> elseState(S state) {
         if (!validStates.contains(state)) {
             throw new IllegalStateException("Invalid state: " + state);
         }
-        defaultState = state;
+        this.defaultState = state;
         return this;
     }
 
+    /**
+     * Actualiza los estados de los elementos
+     */
     public void updateStates() {
-        for (Map.Entry<T, S> entry : stateMap.entrySet()) {
-            T object = entry.getKey();
-            boolean matched = false;
-            for (Map.Entry<Predicate<T>, S> condition : conditions) {
-                if (condition.getKey().test(object)) {
-                    stateMap.put(object, condition.getValue());
-                    matched = true;
+        for (T element: this.elementStates.keySet()) {
+            boolean flag = false;
+            for (Predicate<T> condition: this.conditions.keySet()) {
+                if (condition.test(element)) {
+                    flag = true;
+                    if (this.elementStates.get(element) != this.conditions.get(condition)) {
+                        this.stateMap.get(this.elementStates.get(element)).remove(element);
+                        this.stateMap.get(this.conditions.get(condition)).add(element);
+                        this.elementStates.put(element, this.conditions.get(condition));
+                    }
                     break;
                 }
             }
-            if (!matched) {
-                stateMap.put(object, defaultState);
+            if (!flag) {
+                if (this.elementStates.get(element) != this.defaultState) {
+                    this.stateMap.get(this.elementStates.get(element)).remove(element);
+                    this.stateMap.get(this.defaultState).add(element);
+                    this.elementStates.put(element, this.defaultState);
+                }
             }
         }
     }
 
     /**
-     * Adds or updates the state of a specific object. Initially, this will just set the object's state to the default state.
-     * @param object the object to be tracked or updated.
+     * Anyade y actutaliza los estados de un elemento
+     * 
+     * @param objects los objetos que se anyaden
      */
-    @SafeVarargs
-    public final void addObjects(T... objects) {
-        // put all the objects in the map with the right state. no duplicates allowed
-        
+    public void addObjects(T... objects) {
         for (T object : objects) {
-            System.out.println("Adding object with hashcode: " + object.hashCode());
-
-            if (!stateMap.containsKey(object)) {
-                stateMap.put(object, defaultState);
-            }
+            this.elementStates.putIfAbsent(object, defaultState);
         }
-        updateStates();
+        this.updateStates();
     }
 
     /**
-     * Returns the current state of the specified object.
-     * @param object the object whose state is to be retrieved.
-     * @return the current state of the object, or null if it has not been set or object is not tracked.
+     * Obtener el estado actual de un objeto
+     * 
+     * @param object el objeto cuyo estado se saca
+     * @return el estado del objeto o null si no esta en el tracker
      */
     public S getState(T object) {
-        return stateMap.getOrDefault(object, defaultState);
+        if (this.elementStates.containsKey(object)) {
+            return this.elementStates.get(object);
+        }
+        return null;
     }
 
+    /**
+     * Devuelve la informacion de un state tracker
+     * 
+     * @return un string con la informacion de state tracker
+     */
     @Override
     public String toString() {
-        Map<S, List<T>> groupedByState = new TreeMap<>();
-        for (S state : validStates) {
-            groupedByState.put(state, new ArrayList<>()); 
-        }
-        for (Map.Entry<T, S> entry : stateMap.entrySet()) {
-            groupedByState.get(entry.getValue()).add(entry.getKey());
-        }
-
-        return groupedByState.entrySet().stream()
-                .map(entry -> entry.getKey() + "=[" + entry.getValue().stream()
-                        .map(Object::toString)  
-                        .collect(Collectors.joining(", ")) + "]")
-                .collect(Collectors.joining(", ", "{", "}"));
+       return this.stateMap.toString();
     }
 }

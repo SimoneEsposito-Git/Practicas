@@ -3,9 +3,18 @@ package testers;
 import registration.*;
 import object.*;
 
+/**
+ * Clase para probar el funcionamiento de state tracker
+ */
 public class TesterStateChanges {
     protected ObjectStateTracker<Registration, RegistrationState> regState;
     protected Registration annSmith, johnDoe, lisaMartin;
+
+    /**
+     * Main de la clase que prueba state tracker
+     * 
+     * @param args los argumentos de main
+     */
     public static void main(String[] args) {
         TesterStateChanges tsc = new TesterStateChanges();
         tsc.createRegistrations();
@@ -13,11 +22,19 @@ public class TesterStateChanges {
         tsc.changeRegistrations();
         System.out.println(tsc.regState);
     }
+
+    /**
+     * Cambia las registraciones
+     */
     protected void changeRegistrations() {
         this.annSmith.setAffiliation("University of Miskatonic"); // now it is filled
         this.johnDoe.pay(RegistrationKind.STUDENT.getPrice()); // becomes payed
         this.regState.updateStates();
     }
+
+    /**
+     * Crea las registraciones
+     */
     protected void createRegistrations() {
         this.regState = new ObjectStateTracker<>(RegistrationState.values());
         regState.withState(RegistrationState.PAYED, r -> r.getAmountPayed()==r.getTotalAmount() && !r.getValidated())
