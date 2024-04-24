@@ -8,7 +8,7 @@ import java.util.function.*;
  * 
  * @author Lin Qi y Simone Esposito
  */
-public class ObjectStateTracker<T, S extends Comparable<S>> {
+public class ObjectStateTracker<T, S extends Comparable<S>> implements Iterable<T>{
     private TreeMap<S, List<T>> stateMap;
     private TreeSet<S> validStates;
     private LinkedHashMap<Predicate<T>, S> conditions;
@@ -120,5 +120,35 @@ public class ObjectStateTracker<T, S extends Comparable<S>> {
     @Override
     public String toString() {
        return this.stateMap.toString();
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+            private Iterator<List<T>> stateIterator = stateMap.values().iterator();
+            private Iterator<T> elementIterator = stateIterator.next().iterator();
+
+            @Override
+            public boolean hasNext() {
+                if (elementIterator.hasNext()) {
+                    return true;
+                }
+                while (stateIterator.hasNext()) {
+                    elementIterator = stateIterator.next().iterator();
+                    if (elementIterator.hasNext()) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public T next() {
+                if (!elementIterator.hasNext()) {
+                    elementIterator = stateIterator.next().iterator();
+                }
+                return elementIterator.next();
+            }
+        };
     }
 }
