@@ -13,6 +13,7 @@ public class ObjectStateTracker<T, S extends Comparable<S>> implements Iterable<
     private TreeSet<S> validStates;
     private LinkedHashMap<Predicate<T>, S> conditions;
     private Map<T, S> elementStates;
+    private Map<T, List<StateChange<S>>> trajectories;
     private S defaultState = null;
 
     /**
@@ -28,7 +29,7 @@ public class ObjectStateTracker<T, S extends Comparable<S>> implements Iterable<
             this.stateMap.putIfAbsent(element, new ArrayList<>());
         }
         this.conditions = new LinkedHashMap<>();
-        this.defaultState = this.validStates.first();
+        this.trajectories = new HashMap<>();
     }
 
     /**
@@ -65,25 +66,37 @@ public class ObjectStateTracker<T, S extends Comparable<S>> implements Iterable<
      */
     public void updateStates() {
         for (T element: this.elementStates.keySet()) {
-            boolean flag = false;
-            for (Predicate<T> condition: this.conditions.keySet()) {
-                if (condition.test(element)) {
-                    flag = true;
-                    if (this.elementStates.get(element) != this.conditions.get(condition)) {
-                        this.stateMap.get(this.elementStates.get(element)).remove(element);
-                        this.stateMap.get(this.conditions.get(condition)).add(element);
-                        this.elementStates.put(element, this.conditions.get(condition));
+            this.updateStates(element);
+        }
+    }
+
+    /**
+     * Actualiza para solo un elemento especifico
+     * 
+     * @param element elemento que se actualiza
+     */
+    private void updateStates(T element) {
+        S estadoActual = this.elementStates.get(element);
+        for (Predicate<T> condition: this.conditions.keySet()) {
+            if (condition.test(element)) {
+                S estadoNuevo = this.conditions.get(condition);
+                if (estadoActual != estadoNuevo) {
+                    this.trajectories.get(element).add(new StateChange<S>(estadoActual, estadoNuevo));
+                    if (estadoActual != null) {
+                        this.stateMap.get(estadoActual).remove(element);
                     }
-                    break;
+                    this.stateMap.get(estadoNuevo).add(element);
+                    this.elementStates.put(element, estadoNuevo);
                 }
+                return;
             }
-            if (!flag) {
-                if (this.elementStates.get(element) != this.defaultState) {
-                    this.stateMap.get(this.elementStates.get(element)).remove(element);
-                    this.stateMap.get(this.defaultState).add(element);
-                    this.elementStates.put(element, this.defaultState);
-                }
+        }
+        if (estadoActual != this.defaultState) {
+            if (estadoActual != null) {
+                this.stateMap.get(estadoActual).remove(element);
             }
+            this.stateMap.get(this.defaultState).add(element);
+            this.elementStates.put(element, this.defaultState);
         }
     }
 
@@ -92,11 +105,15 @@ public class ObjectStateTracker<T, S extends Comparable<S>> implements Iterable<
      * 
      * @param objects los objetos que se anyaden
      */
-    public void addObjects(T... objects) {
+    @SafeVarargs
+    public final void addObjects(T... objects) {
         for (T object : objects) {
-            this.elementStates.putIfAbsent(object, defaultState);
+            if (!this.elementStates.containsKey(object)) {
+                this.elementStates.put(object, null);
+                this.trajectories.put(object, new ArrayList<>());
+                this.updateStates(object);
+            }
         }
-        this.updateStates();
     }
 
     /**
@@ -110,6 +127,26 @@ public class ObjectStateTracker<T, S extends Comparable<S>> implements Iterable<
             return this.elementStates.get(object);
         }
         return null;
+    }
+
+    /**
+     * Devuelve la trayectoria de un objeto
+     * 
+     * @param object el objeto cuya trayectoria queremos sacar
+     * @return la trayactoria del objeto
+     */
+    public List<StateChange<S>> trajectory(T object) {
+        return this.trajectories.get(object);
+    }
+
+    /**
+     * Devuelve el iterator de state tracker
+     * 
+     * @return el iterator
+     */
+    @Override
+    public Iterator<T> iterator() {
+        return this.elementStates.keySet().iterator();
     }
 
     /**
