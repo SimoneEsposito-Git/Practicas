@@ -143,11 +143,11 @@ public class ObjectStateTracker<T, S extends Comparable<S>> implements Iterable<
      * Devuelve el iterator de state tracker
      * 
      * @return el iterator
-     */
+     
     @Override
     public Iterator<T> iterator() {
         return this.elementStates.keySet().iterator();
-    }
+    }*/
 
     /**
      * Devuelve la informacion de un state tracker

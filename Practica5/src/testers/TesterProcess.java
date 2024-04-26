@@ -1,6 +1,5 @@
 package testers;
 
-import object.ObjectStateTracker;
 import process.Process;
 import registration.Registration;
 import registration.RegistrationState;

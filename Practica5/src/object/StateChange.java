@@ -1,29 +1,3 @@
-<<<<<<< HEAD
-package object;
-
-public class StateChange <S extends Enum<S>>{
-    private S from;
-    private S to;
-    
-    public StateChange(S from, S to) {
-        this.from = from;
-        this.to = to;
-    }
-    
-    public S getFrom() {
-        return this.from;
-    }
-    
-    public S getTo() {
-        return this.to;
-    }
-    
-    @Override
-    public String toString() {
-        return this.from + " -> " + this.to;
-    }    
-}
-=======
 package object;
 
 import java.time.LocalDateTime;
@@ -83,4 +57,3 @@ public class StateChange<S extends Comparable<S>> {
         }
     }
 }
->>>>>>> a790931343c45a4c1410195e17ef62f8c17f4180

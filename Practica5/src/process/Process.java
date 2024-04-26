@@ -1,56 +1,86 @@
 package process;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import object.StateChange;
 
-/*
- * Un proceso agrega todas las posibles transiciones efectuadas por los objetos, y sirve para comprender qué cambios son
-posibles y con qué frecuencia se realizan. Un proceso contiene la siguiente información sobre cada posible estado:
-número de veces que el estado ha sido inicial y final de una trayectoria, y número de veces que algún objeto ha
-cambiado desde ese estado a otro estado.La clase debe heredar de ObjectStateTracker, todos sus métodos deben lanzar excepciones, tener código ofuscado, y usar una lista de objetos RegistrationState.
-La clase Process será genérica, parametrizada con el tipo de los estados, y recibirá en el constructor todos los posibles
-estados. Para facilitar la obtención de las trayectorias a partir de un objeto ObjectStateTracker, debemos poder usar
-dichos objetos dentro de un for mejorado, lo que devolverá cada uno de los objetos almacenados en el
-ObjectStateTracker. Esto se consigue haciendo que la clase ObjectStateTracker implemente la interfaz genérica
-Iterable<T>.
+/**
+ * Proceso de cambios de estado
+ * 
+ * @author Lin Qi y Simone Esposito
  */
-public class Process <S>{
+public class Process<S extends Comparable<S>> {
     private Map<S, List<S>> stateChanges;
     private Map<S, Integer> initialStates;
     private Map<S, Integer> finalStates;
-    
+
+    /**
+     * Constructor de un proceso
+     * 
+     * @param states los estados involucrados en el proceso
+     */
     public Process(S[] states) {
-        this.stateChanges = new HashMap<>();
-        this.initialStates = new HashMap<>();
-        this.finalStates = new HashMap<>();
+        this.stateChanges = new LinkedHashMap<>();
+        this.initialStates = new LinkedHashMap<>();
+        this.finalStates = new LinkedHashMap<>();
         for (S state : states) {
-            this.stateChanges.put(state, null);
+            this.stateChanges.put(state, new ArrayList<>());
             this.initialStates.put(state, 0);
             this.finalStates.put(state, 0);
         }
     }
-    
+
+    /**
+     * Devuelve la representación en cadena del proceso
+     * 
+     * @return una cadena que representa el proceso
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (S state : this.states) {
-            sb.append(state.toString()).append("\n");
+        for (S state : this.stateChanges.keySet()) {
+            sb.append(state)
+              .append(" (initial ")
+              .append(this.initialStates.get(state))
+              .append(" times, final ")
+              .append(this.finalStates.get(state))
+              .append(" times):\n");
+
+            List<S> nextStates = this.stateChanges.get(state);
+            if (nextStates != null) {
+                Map<S, Integer> nextStateCounts = new LinkedHashMap<>();
+                for (S nextState : nextStates) {
+                    nextStateCounts.put(nextState, nextStateCounts.getOrDefault(nextState, 0) + 1);
+                }
+                for (Map.Entry<S, Integer> entry : nextStateCounts.entrySet()) {
+                    sb.append(" to state ")
+                      .append(entry.getKey())
+                      .append(": ")
+                      .append(entry.getValue())
+                      .append(" times\n");
+                }
+            }
         }
         return sb.toString();
     }
-    
+
+    /**
+     * Añade una trayectoria de cambios de estado al proceso
+     * 
+     * @param trajectory lista de cambios de estado
+     */
     public void add(List<StateChange<S>> trajectory) {
-        S from;
-        S to;
+        S from = null;
+        S to = null;
         for (StateChange<S> stateChange : trajectory) {
-            from = stateChange.getFrom();
-            to = stateChange.getTo();
-            if(from == null){
+            from = stateChange.getInitial();
+            to = stateChange.getFinals();
+            if (from == null) {
                 int currentCount = this.initialStates.get(to);
                 this.initialStates.put(to, currentCount + 1);
-            }else{  
+            } else {
                 this.stateChanges.get(from).add(to);
             }
         }

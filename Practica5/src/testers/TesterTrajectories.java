@@ -1,37 +1,6 @@
-<<<<<<< HEAD
-package testers;
-
-import java.util.List;
-
-import registration.Registration;
-
-
-public class TesterTrajectories extends TesterStateChanges {
-    public static void main(String[] args) {
-        TesterTrajectories tsc = new TesterTrajectories();
-        tsc.createRegistrations();
-        tsc.changeRegistrations();
-        tsc.displayTrajectories();
-    }
-
-    @Override
-    protected void changeRegistrations() {
-        super.changeRegistrations();
-        this.johnDoe.setValidated(true);
-        this.lisaMartin.setAffiliation("Arkham College");
-        this.regState.updateStates();
-    }
-
-    protected void displayTrajectories() {
-        for (Registration r : List.of(annSmith, johnDoe, lisaMartin)){
-
-        }
-    }
-=======
 package testers;
 
 import java.util.*;
-import object.*;
 import registration.*;
 
 /**
@@ -70,5 +39,4 @@ public class TesterTrajectories extends TesterStateChanges{
         for (Registration r : List.of(annSmith, johnDoe, lisaMartin))
             System.out.println(r+": "+this.regState.trajectory(r));
     }
->>>>>>> a790931343c45a4c1410195e17ef62f8c17f4180
 }
