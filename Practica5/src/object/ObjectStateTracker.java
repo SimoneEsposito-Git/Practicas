@@ -8,7 +8,7 @@ import java.util.function.*;
  * 
  * @author Lin Qi y Simone Esposito
  */
-public class ObjectStateTracker<T, S extends Comparable<S>> implements Iterable<T>{
+public class ObjectStateTracker<T, S extends Comparable<S>> implements Iterable<T>, StateObserver{
     private TreeMap<S, List<T>> stateMap;
     private TreeSet<S> validStates;
     private LinkedHashMap<Predicate<T>, S> conditions;
